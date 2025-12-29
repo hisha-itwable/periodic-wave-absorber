@@ -21,9 +21,12 @@ def main():
         )
     ]
     
-    # PML layers - current polynomial grading
-    pml_layers = [mp.PML(thickness=1.0, direction=mp.X),
-                  mp.PML(thickness=1.0, direction=mp.Y)]
+    # PML layers - optimized for grazing angles
+    # Use higher-order polynomial grading (m=4) for smoother transition
+    # Increase PML thickness to 2.0 for better absorption at oblique incidence
+    # Reduced asymptotic reflection R_asymptotic to 1e-9 for improved accuracy
+    pml_layers = [mp.PML(thickness=2.0, direction=mp.X, R_asymptotic=1e-9, pml_profile=lambda u: u**4),
+                  mp.PML(thickness=2.0, direction=mp.Y, R_asymptotic=1e-9, pml_profile=lambda u: u**4)]
     
     # Setup simulation
     sim = mp.Simulation(
